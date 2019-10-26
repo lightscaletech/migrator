@@ -151,6 +151,9 @@ FILE;
 
         $this->set_version($db, $ver);
 
+        if($logfn)
+            $logfn(sprintf('Ran %d migrations', count($remaining)));
+
         return true;
     }
 
@@ -204,7 +207,7 @@ FILE;
         $this->set_version($db, NULL);
 
         if($logfn)
-            $logfn(sprintf('Rolled back %i migrations', count($migrations)));
+            $logfn(sprintf('Rolled back %d migrations', count($migrations)));
         return true;
     }
 
