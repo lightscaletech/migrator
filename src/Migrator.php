@@ -171,7 +171,7 @@ FILE;
             $prev = $m;
         }
 
-        if(empty($migrations)) {
+        if($current) {
             if($logfn) $logfn('No more migrations to rollback');
             return false;
         }
