@@ -1,0 +1,23 @@
+{
+  "name": "lightscale/migrator",
+  "description": "A generic database migration library",
+  "type": "library",
+  "require": {
+  },
+  "license": "GPLv3",
+  "authors": [
+    {
+      "name": "Sam Light",
+      "email": "sam@lightscale.co.uk"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require-dev": {
+    "symfony/console": "^4.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "Lightscale\\Migrator\\": "src/"
+    }
+  }
+}
