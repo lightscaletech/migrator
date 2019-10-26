@@ -115,9 +115,7 @@ for a working example.
 
 ## Usage
 
-Run the `./migrator` script.
-
-This will output the help.
+Run the `./migrator` script. This will output the help.
 
 Here is the available commands:
 
@@ -162,3 +160,13 @@ class example implements Migration {
 }
 
 ```
+
+## Release history
+- 0.0.1 All core functionality working. Still in on-going development.
+
+## Requirements
+- PHP 7.1.3
+- Composer
+
+## Contributors
+Sam Light
