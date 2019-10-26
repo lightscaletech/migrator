@@ -191,6 +191,7 @@ FILE;
         }
 
         $this->set_version(NULL);
+        return true;
     }
 
 }
