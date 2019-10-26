@@ -130,6 +130,17 @@ Here is the available commands:
 
 ## Migrations
 
+Here is the file structure of the migrations. You can specify the directory in
+the config and then its just flat:
+
+```
+/
+└── dbmigrations
+    ├── 191026_144428_test_mig_1.php
+    ├── 191026_144432_test_mig_2.php
+    └── 191026_144435_test_mig_3.php
+```
+
 This is the structure of a migration:
 
 ``` php
