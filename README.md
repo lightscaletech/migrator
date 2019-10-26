@@ -25,7 +25,7 @@ Once this is added run `composer update` to install it.
 
 I'd like to get this added to packagist but one thing at a time.
 
-## Usage
+## Configuration
 You need to do two things to use this. Copy the command line tool that manages
 migrations to the root of your project. It needs to be the same directory as
 `/vendor`.
