@@ -160,11 +160,6 @@ FILE;
 
         $migrations = $this->load_migrations();
 
-        if(empty($migrations)) {
-            if($logfn) $logfn('No more migrations to rollback');
-            return false;
-        }
-
         $current = null;
         $prev = null;
         foreach($migrations as $m) {
@@ -175,6 +170,12 @@ FILE;
             }
             $prev = $m;
         }
+
+        if(empty($migrations)) {
+            if($logfn) $logfn('No more migrations to rollback');
+            return false;
+        }
+
         self::execute_migration($current, $db, 'down', $logfn);
 
         $this->set_version($prev[1]);
