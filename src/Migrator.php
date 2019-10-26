@@ -46,12 +46,12 @@ class Migrator {
         return $this->require_config_fn('get_db_fn');
     }
 
-    private function get_version() {
-        return $this->require_config_fn('version_get_fn');
+    private function get_version($db) {
+        return $this->require_config_fn('version_get_fn', [$db]);
     }
 
-    private function set_version($ver) {
-        $this->require_config_fn('version_update_fn', [$ver]);
+    private function set_version($db, $ver) {
+        $this->require_config_fn('version_update_fn', [$db, $ver]);
     }
 
     private static function split_path($path) {
@@ -127,8 +127,8 @@ FILE;
     }
 
     public function migrate($logfn = NULL) {
-        $ver = $this->get_version();
-        $db = $this->get_db();;
+        $db = $this->get_db();
+        $ver = $this->get_version($db);
 
         $migrations = $this->load_migrations();
 
@@ -149,14 +149,14 @@ FILE;
             $ver = self::execute_migration($m, $db,'up', $logfn);
         }
 
-        $this->set_version($ver);
+        $this->set_version($db, $ver);
 
         return true;
     }
 
     public function rollback($logfn = null) {
-        $ver = $this->get_version();
-        $db = $this->get_db();;
+        $db = $this->get_db();
+        $ver = $this->get_version($db);
 
         $migrations = $this->load_migrations();
 
@@ -178,14 +178,14 @@ FILE;
 
         self::execute_migration($current, $db, 'down', $logfn);
 
-        $this->set_version($prev[1]);
+        $this->set_version($db, $prev[1]);
 
         return true;
     }
 
     public function reset($logfn = null) {
-        $ver = $this->get_version();
-        $db = $this->get_db();;
+        $db = $this->get_db();
+        $ver = $this->get_version($db);
 
         $migrations = $this->load_migrations();
 
@@ -201,7 +201,7 @@ FILE;
             self::execute_migration($m, $db, 'down', $logfn);
         }
 
-        $this->set_version(NULL);
+        $this->set_version($db, NULL);
 
         if($logfn)
             $logfn(sprintf('Rolled back %i migrations', count($migrations)));

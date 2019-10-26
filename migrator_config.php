@@ -1,16 +1,15 @@
 <?php
 
-function version_get() {
-    //return '191025_152617';
-    return '191026_090245';
+function version_get($db) {
+
 }
 
-function version_update($version) {
-    var_dump($version);
+function version_update($db, $version) {
+
 }
 
 function get_db() {
-    return 'database';
+
 }
 
 return [
