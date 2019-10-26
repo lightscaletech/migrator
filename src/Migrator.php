@@ -138,6 +138,11 @@ FILE;
             return $ver < $v;
         });
 
+        if(empty($migrations)) {
+            if($logfn) $logfn('All migrations are complete');
+            return true;
+        }
+
         $migration = NULL;
 
         foreach($remaining as $m) {
@@ -196,6 +201,9 @@ FILE;
         }
 
         $this->set_version(NULL);
+
+        if($logfn)
+            $logfn(sprintf('Rolled back %i migrations', count($migrations)));
         return true;
     }
 
