@@ -155,6 +155,11 @@ FILE;
 
         $migrations = $this->load_migrations();
 
+        if(empty($migrations)) {
+            if($logfn) $logfn('No more migrations to rollback');
+            return false;
+        }
+
         $current = null;
         $prev = null;
         foreach($migrations as $m) {
