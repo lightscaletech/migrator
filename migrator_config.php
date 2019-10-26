@@ -47,9 +47,14 @@ function get_db() {
      */
 }
 
+
+/*
+ * This file needs to return the configuration in an associative array.
+ */
 return [
-    'migrations_dir' => 'database_migrations',
-    'version_update_fn' => 'version_update',
-    'version_get_fn' => 'version_get',
-    'get_db_fn' => 'get_db'
+    'init' => 'init',
+    'migrations_dir' => 'database_migrations', // Required
+    'version_update_fn' => 'version_update',   // Required
+    'version_get_fn' => 'version_get',         // Required
+    'get_db_fn' => 'get_db'                    // Required
 ];

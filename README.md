@@ -31,7 +31,7 @@ migrations to the root of your project. It needs to be the same directory as
 `/vendor`.
 
 ``` shell
-# cp vendor/lightscale/migrator/bin/migrator.php ./migrator
+$ cp vendor/lightscale/migrator/bin/migrator.php ./migrator
 ```
 
 You then need a config file. This is where things get tricky as in here you
@@ -91,6 +91,10 @@ function get_db() {
      */
 }
 
+
+/*
+ * This file needs to return the configuration in an associative array.
+ */
 return [
     'init' => 'init',
     'migrations_dir' => 'database_migrations', // Required
@@ -99,9 +103,62 @@ return [
     'get_db_fn' => 'get_db'                    // Required
 ];
 
-
 ```
 
 Of course you might want to stick it in a class or namespace to avoid name
-collisions. Just make sure that the config file returns an object that contains
-the required properties.
+collisions. Just make sure that the config file returns an associative array
+that contains the required properties.
+
+Check out
+[lightscale/migrator-config-wordpress](https://github.com/lightscaletech/migrator-config-wordpress)
+for a working example.
+
+## Usage
+
+Run the `./migrator` script.
+
+This will output the help.
+
+Here is the available commands:
+
+```
+  create    Create a new migration
+  help      Displays help for a command
+  list      Lists commands
+  migrate   Run all remaining migrations
+  reset     Rollback all migrations.
+  rollback  Undo one migration
+```
+
+## Migrations
+
+This is the structure of a migration:
+
+``` php
+<?php
+
+use Lightscale\Migrator\Migration;
+
+class example implements Migration {
+
+    public function up($db) {
+        /*
+         * Called when migrate is run.
+         *
+         * The DB parameter is the value
+         * returned by "get_db_fn" from the config.
+         */
+    }
+
+    public function down($db) {
+        /*
+         * Called when rollback or reset.
+         *
+         * The DB parameter is the value
+         * returned by "get_db_fn" from the config.
+         */
+    }
+
+}
+
+```
