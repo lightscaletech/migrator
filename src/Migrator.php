@@ -138,7 +138,7 @@ FILE;
             return $ver < $v;
         });
 
-        if(empty($migrations)) {
+        if(empty($remaining)) {
             if($logfn) $logfn('All migrations are complete');
             return true;
         }
@@ -171,9 +171,9 @@ FILE;
             $prev = $m;
         }
 
-        if($current) {
+        if(!$current) {
             if($logfn) $logfn('No more migrations to rollback');
-            return false;
+            return true;
         }
 
         self::execute_migration($current, $db, 'down', $logfn);
