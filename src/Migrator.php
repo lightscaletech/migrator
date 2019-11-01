@@ -81,7 +81,7 @@ class Migrator {
 
         $extends = (isset($this->config['migration_extends']) ?
                     $this->config['migration_extends'] : NULL);
-        $extends = empty($extends) ? '' : ' extends ' . '';
+        $extends = empty($extends) ? '' : ' extends ' . $extends;
 
         if(!file_exists($dir)) mkdir($dir, 0777, true);
 
@@ -95,7 +95,7 @@ class Migrator {
 
 use Lightscale\Migrator\Migration;
 
-class {$name} implements Migration{$extends} {
+class {$name}{$extends} implements Migration {
 
     public function up(\$db) {
 
