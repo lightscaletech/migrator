@@ -78,6 +78,11 @@ class Migrator {
     public function createMigration($name) {
         $fname = self::make_version() . "_{$name}.php";
         $dir = $this->config['migrations_dir'];
+
+        $extends = (isset($this->config['migration_extends']) ?
+                    $this->config['migration_extends'] : NULL);
+        $extends = empty($extends) ? '' : ' extends ' . '';
+
         if(!file_exists($dir)) mkdir($dir, 0777, true);
 
         if(count(glob("{$dir}/*_{$name}.php")) > 0)
@@ -90,7 +95,7 @@ class Migrator {
 
 use Lightscale\Migrator\Migration;
 
-class {$name} implements Migration {
+class {$name} implements Migration{$extends} {
 
     public function up(\$db) {
 
