@@ -151,7 +151,13 @@ FILE;
         $migration = NULL;
 
         foreach($remaining as $m) {
-            $ver = self::execute_migration($m, $db,'up', $logfn);
+            try {
+                $ver = self::execute_migration($m, $db,'up', $logfn);
+            }
+            catch (Exception $e) {
+                $this->set_version($db, $ver);
+                throw $e;
+            }
         }
 
         $this->set_version($db, $ver);
@@ -206,7 +212,13 @@ FILE;
         $migrations = array_reverse($migrations);
 
         foreach($migrations as $m) {
-            self::execute_migration($m, $db, 'down', $logfn);
+            try {
+                self::execute_migration($m, $db, 'down', $logfn);
+            }
+            catch (Exception $e) {
+                $this->set_version($db, $ver);
+                throw $e;
+            }
         }
 
         $this->set_version($db, NULL);
