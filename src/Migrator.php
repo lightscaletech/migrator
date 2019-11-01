@@ -38,7 +38,7 @@ class Migrator {
 
     private function load_migrations() {
         return self::split_all_migrations(
-            glob('./' . $this->config['migrations_dir'] . '/*')
+            glob($this->config['migrations_dir'] . '/*')
         );
     }
 
