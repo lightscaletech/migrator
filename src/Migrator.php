@@ -78,6 +78,11 @@ class Migrator {
     public function createMigration($name) {
         $fname = self::make_version() . "_{$name}.php";
         $dir = $this->config['migrations_dir'];
+
+        $extends = (isset($this->config['migration_extends']) ?
+                    $this->config['migration_extends'] : NULL);
+        $extends = empty($extends) ? '' : ' extends ' . $extends;
+
         if(!file_exists($dir)) mkdir($dir, 0777, true);
 
         if(count(glob("{$dir}/*_{$name}.php")) > 0)
@@ -90,7 +95,7 @@ class Migrator {
 
 use Lightscale\Migrator\Migration;
 
-class {$name} implements Migration {
+class {$name}{$extends} implements Migration {
 
     public function up(\$db) {
 
@@ -113,15 +118,11 @@ FILE;
     private static function execute_migration($m, $db, $fn, $logfn) {
         list($path, $version, $name) = $m;
         if($logfn) $logfn("Running:   {$version}_{$name}");
-        try {
-            require($path);
-            $migration = new $name;
-            call_user_func_array([$migration, $fn], [$db]);
-        }
-        catch(Exception $exception) {
-            if($logfn) $logfn("Failed to complete {$version}_{$name}", true);
-            throw $exception;
-        }
+
+        require($path);
+        $migration = new $name;
+        call_user_func_array([$migration, $fn], [$db]);
+
         if($logfn) $logfn("Completed: {$version}_{$name}");
         return $version;
     }
@@ -146,7 +147,13 @@ FILE;
         $migration = NULL;
 
         foreach($remaining as $m) {
-            $ver = self::execute_migration($m, $db,'up', $logfn);
+            try {
+                $ver = self::execute_migration($m, $db,'up', $logfn);
+            }
+            catch (\Exception $e) {
+                $this->set_version($db, $ver);
+                throw $e;
+            }
         }
 
         $this->set_version($db, $ver);
@@ -201,7 +208,13 @@ FILE;
         $migrations = array_reverse($migrations);
 
         foreach($migrations as $m) {
-            self::execute_migration($m, $db, 'down', $logfn);
+            try {
+                self::execute_migration($m, $db, 'down', $logfn);
+            }
+            catch (\Exception $e) {
+                $this->set_version($db, $ver);
+                throw $e;
+            }
         }
 
         $this->set_version($db, NULL);

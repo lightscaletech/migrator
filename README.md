@@ -6,24 +6,10 @@ Its in very early development but usable. You need to know what your doing to
 use this.
 
 ## Install
-Currently I have not added this to packagist meaning that to install it you have
-add the git repo to your `composer.json`.
-
-``` json
-    "repositories": [
-        {
-            "url": "https://github.com/lightscaletech/migrator.git",
-            "type": "vcs"
-        }
-    ],
-    "require": {
-        "lightscale/migrator": "dev-master"
-    }
+This should be installed from packagist with composer:
+``` shell
+$ composer require lightscale/migrator
 ```
-
-Once this is added run `composer update` to install it.
-
-I'd like to get this added to packagist but one thing at a time.
 
 ## Configuration
 You need to do two things to use this. Copy the command line tool that manages
