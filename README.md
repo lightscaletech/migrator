@@ -159,6 +159,10 @@ class example implements Migration {
 ```
 
 ## Release history
+- 0.0.2
+  - Feature - ability to set a class to extend migrations with.
+  - Bug - update version to last successful when a migration fails.
+  - Bug - fixes to migrator_dir handling so it can find migrations.
 - 0.0.1 All core functionality working. Still in on-going development.
 
 ## Requirements
