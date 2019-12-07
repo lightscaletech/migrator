@@ -59,7 +59,7 @@ class Migrator {
         $file = end($tmp);
         $tmp = explode('_', $file);
         $version = array_shift($tmp) . '_' . array_shift($tmp);
-        $name = implode($tmp, '_');
+        $name = implode('_', $tmp);
         $name = explode('.', $name);
         $name = array_shift($name);
         return [
