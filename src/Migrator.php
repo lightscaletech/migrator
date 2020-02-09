@@ -115,13 +115,26 @@ FILE;
         return FALSE;
     }
 
-    private static function execute_migration($m, $db, $fn, $logfn) {
+    private function execute_migration($m, $db, $fn, $logfn) {
+        $use_trans = isset($this->config['transactions_enabled']) ?
+                     $this->config['transactions_enabled'] : false;
+
         list($path, $version, $name) = $m;
         if($logfn) $logfn("Running:   {$version}_{$name}");
 
-        require($path);
-        $migration = new $name;
-        call_user_func_array([$migration, $fn], [$db]);
+        if($use_trans) $this->require_config_fn('transaction_start', [$db]);
+        try {
+            require($path);
+            $migration = new $name;
+            call_user_func_array([$migration, $fn], [$db]);
+            if($use_trans)
+                $this->require_config_fn('transaction_commit', [$db]);
+        }
+        catch(Exception $e) {
+            if($use_trans)
+                $this->require_config_fn('transaction_rollback', [$db]);
+            throw $e;
+        }
 
         if($logfn) $logfn("Completed: {$version}_{$name}");
         return $version;
@@ -148,7 +161,7 @@ FILE;
 
         foreach($remaining as $m) {
             try {
-                $ver = self::execute_migration($m, $db,'up', $logfn);
+                $ver = $this->execute_migration($m, $db,'up', $logfn);
             }
             catch (\Exception $e) {
                 $this->set_version($db, $ver);
@@ -186,7 +199,7 @@ FILE;
             return true;
         }
 
-        self::execute_migration($current, $db, 'down', $logfn);
+        $this->execute_migration($current, $db, 'down', $logfn);
 
         $this->set_version($db, $prev[1]);
 
@@ -209,7 +222,7 @@ FILE;
 
         foreach($migrations as $m) {
             try {
-                self::execute_migration($m, $db, 'down', $logfn);
+                $this->execute_migration($m, $db, 'down', $logfn);
             }
             catch (\Exception $e) {
                 $this->set_version($db, $ver);
