@@ -130,7 +130,7 @@ FILE;
             if($use_trans)
                 $this->require_config_fn('transaction_commit', [$db]);
         }
-        catch(Exception $e) {
+        catch(\Exception $e) {
             if($use_trans)
                 $this->require_config_fn('transaction_rollback', [$db]);
             throw $e;
